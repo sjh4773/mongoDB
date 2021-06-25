@@ -33,3 +33,37 @@
         
         // user_id가 "bcd004"이거나 age가 28인 데이터를 찾고 _id를 제외해라.
         db.employees.find({ $or: [ { user_id: "bcd004"}, { age: 28} ] }, {_id:0})
+
+## 비교 문법
+
+        $eq  :  =  , 지정된 값과 같은 값을 일치시킵니다.
+        $gt  :  >  , 지정된 값보다 큰 값을 일치시킵니다.
+        $gte :  >= , 지정된 값보다 크거나 같은 값을 일치시킵니다.
+        $lt  :  <  , 지정된 값보다 작은 값을 일치시킵니다.
+        $lte :  <= , 지정된 값보다 작거나 같은 값을 일치시킵니다.
+        $ne  :  != , 지정된 값과 같지 않은 모든 값을 일치시킵니다.
+        $nin :       어레이에 지정된 값과 일치하지 않는 것을 찾는다.
+
+        db.people.find({ age : { $gt: 25 } }) - SELECT * FROM people WHERE age > 25
+        db.people.find({ age : { $lt: 25 } }) - SELECT * FROM people WHERE age < 25
+        db.people.find({ age : { $gt: 25, $lte: 50 } }) - SELECT * FROM people WHERE age > 25, age <= 50
+        
+        db.people.find( { user_id: /bc/ })
+        db.people.find( { user_id: { $regex: /^bc/ } } ) - SELELCT * FROM people WHERE user_id LIKE "bc%"
+        
+        db.people.find( { status: "A" } ).sort( { user_id: 1 } ) - SELECT * people WHERE status = "A" ORDER BY user_id ASC
+        db.people.find( { status: "A" } ).sort( { user_id: -1 } ) - SELECT * people WHRER status = "A" ORDER BY user_id DESC
+        
+        db.people.count()
+        db.people.find().count() - SELECT COUNT(*) FROM people
+        
+        db.people.count( { user_id: { $exists: true } } )
+        db.people.find( { user_id: { $exists: true } } ).count() - SELECT COUNT(user_id) FROM people
+        
+        db.people.count( { age: { $gt: 30 } } )
+        db.people.find( { age: { $gt: 30 } } ).count() - SELECT COUNT(*) FROM people WHERE age > 30
+        
+        db.people.distinct( "status" ) - SELECT DISTINCT(status) FROM people
+        
+        db.people.findOne()
+        db.people.find().limit(1) - SELECT * FROM people LIMIT 1
